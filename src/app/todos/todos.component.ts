@@ -41,12 +41,6 @@ export class TodosComponent implements OnInit {
       observer.complete();
     });
 
-    data$.subscribe({
-      next: (value) => console.log(value),
-      error: (err) => console.error(err),
-      complete: () => console.log('DONE!'),
-    });
-
     this.todoList = this.todosService.getTodos();
 
     this.formdata = new FormGroup({

@@ -1,42 +1,50 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
+import { filter, findIndex, from, map } from 'rxjs';
 import { Todo } from './todo/todo.component';
 
 @Injectable()
 export class TodosService {
-  todoList: Todo[] = [{ id: 12, message: 'Do something', done: false }];
+  todoListBase: Todo[] = [{ id: 12, message: 'Do something', done: false }];
+  todoList = from(this.todoListBase);
 
   getTodos() {
-    return this.todoList.slice();
+    return this.todoList.subscribe();
   }
 
   getTodo(todo: Todo) {
-    return this.todoList.indexOf(todo);
+    return this.todoList.pipe(filter((myTodo) => todo === myTodo));
   }
 
   editTodo(todo: Todo) {
-    let id = this.todoList.indexOf(todo);
-    this.todoList[id] = todo;
+    this.todoList.pipe(
+      map((myTodo) => {
+        if (myTodo.id == todo.id) {
+          return todo;
+        }
+        return myTodo;
+      })
+    );
   }
 
-  getTodoById(id: number): Todo {
-    return this.todoList.filter((todo: Todo) => {
-      todo.id = id;
-    })[0];
+  getTodoById(id: number) {
+    // return this.todoList.filter((todo: Todo) => {
+    //   todo.id = id;
+    // })[0];
   }
 
   addTodo(todo: Todo) {
-    let result = this.todoList.filter(
-      (todoElement) => todoElement.id === todo.id
+    this.todoList.pipe(
+      map((myTodo) => {
+        if (myTodo.id == todo.id) {
+          return todo;
+        }
+        return myTodo;
+      })
     );
-    if (result.length === 0) {
-      this.todoList = [...this.todoList, todo];
-    } else {
-      alert('Id already taken !');
-    }
   }
 
   deleteTodo(id: number) {
-    this.todoList = this.todoList?.filter((todo: Todo) => todo.id !== id);
+    this.todoList = this.todoList?.pipe(filter((todo: Todo) => todo.id !== id));
   }
 
   @Output() change: EventEmitter<boolean> = new EventEmitter();
