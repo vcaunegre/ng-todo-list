@@ -1,0 +1,15 @@
+<div class="form">
+    <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
+        <input type="number" ngClass="id" [placeholder]="todoList.length" formControlName="id">
+        <input type="text" name="message" placeholder="message" formControlName="message">
+        <br />
+        <br />
+        <input type="submit" value="Click here">
+    </form>
+</div>
+<p>Textbox result is: {{userName}}</p>
+<div *ngFor="let todo of todoList">
+    <app-todo (deleteTodo)="deleteTodo($event)" [todo]="todo"></app-todo>
+</div>
+
+<router-outlet></router-outlet>

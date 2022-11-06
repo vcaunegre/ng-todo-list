@@ -1,0 +1,8 @@
+<p>edit {{id && id}}</p>
+<form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
+    <input type="text" ngClass="message" formControlName="message" [value]="todo.message" />
+    <br />
+    <br />
+    <input type="submit" value="Click here">
+</form>
+<router-outlet></router-outlet>

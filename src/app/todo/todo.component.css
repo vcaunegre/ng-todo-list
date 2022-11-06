@@ -1,0 +1,29 @@
+.todo {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid red;
+  border-radius: 12px;
+  margin: 5px;
+  font-weight: bold;
+  font-size: 20px;
+  color: red;
+  background: rgba(252, 132, 132, 0.239);
+}
+
+.todo p {
+  padding: 0 20px;
+}
+
+.btn-delete {
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: rgb(224, 0, 0);
+}

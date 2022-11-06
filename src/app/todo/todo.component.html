@@ -1,0 +1,6 @@
+<div class="todo" *ngIf="todo">
+    <p>{{todo.id}}</p>
+    <p>{{todo.message}}</p>
+    <button (click)="deleteMyTodo(todo.id)" class="btn-delete">Delete</button>
+    <li><a [routerLink]="['/edit',todo.id]">edit</a></li>
+</div>
