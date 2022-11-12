@@ -11,21 +11,14 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class EditComponent implements OnInit {
   id!: number | null;
-  todo!: Todo;
+  todo!: Todo | null;
   formdata: any;
 
   constructor(
     private route: ActivatedRoute,
     private todosService: TodosService
   ) {}
-
-  onClickSubmit(data: any) {
-    this.todo.message = this.formdata.message;
-    this.todosService.editTodo(this.todo);
-  }
-
   ngOnInit(): void {
-    this.todo;
     this.formdata = new FormGroup({
       message: new FormControl(),
     });
@@ -36,6 +29,15 @@ export class EditComponent implements OnInit {
     }
     if (this.id !== null) {
       this.todo = this.todosService.getTodoById(this.id);
+    }
+  }
+
+  onClickSubmit(data: any) {
+    if (this.todo) {
+      this.todo.message = data.message;
+      console.log(this.todo);
+
+      this.todosService.updateTodo(this.todo);
     }
   }
 }

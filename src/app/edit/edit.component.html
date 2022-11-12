@@ -1,6 +1,6 @@
-<p>edit {{id && id}}</p>
+<p>{{todo?.message}}</p>
 <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
-    <input type="text" ngClass="message" formControlName="message" [value]="todo.message" />
+    <input type="text" ngClass="message" formControlName="message" *ngIf="todo" [value]="todo.message" />
     <br />
     <br />
     <input type="submit" value="Click here">

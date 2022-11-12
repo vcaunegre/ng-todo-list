@@ -1,51 +1,46 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { filter, findIndex, from, map } from 'rxjs';
+import {
+  BehaviorSubject,
+  filter,
+  findIndex,
+  from,
+  map,
+  Observable,
+  of,
+  Subject,
+} from 'rxjs';
 import { Todo } from './todo/todo.component';
 
 @Injectable()
 export class TodosService {
-  todoListBase: Todo[] = [{ id: 12, message: 'Do something', done: false }];
-  todoList = from(this.todoListBase);
+  private todoList: BehaviorSubject<Todo[]> = new BehaviorSubject<Todo[]>([]);
 
-  getTodos() {
-    return this.todoList.subscribe();
-  }
-
-  getTodo(todo: Todo) {
-    return this.todoList.pipe(filter((myTodo) => todo === myTodo));
-  }
-
-  editTodo(todo: Todo) {
-    this.todoList.pipe(
-      map((myTodo) => {
-        if (myTodo.id == todo.id) {
-          return todo;
-        }
-        return myTodo;
-      })
-    );
+  getTodos(): Observable<Todo[]> {
+    return this.todoList;
   }
 
   getTodoById(id: number) {
-    // return this.todoList.filter((todo: Todo) => {
-    //   todo.id = id;
-    // })[0];
+    let result = this.todoList.getValue().filter((res) => res.id == id);
+    if (result.length > 0) {
+      return result[0];
+    }
+    return null;
   }
 
-  addTodo(todo: Todo) {
-    this.todoList.pipe(
-      map((myTodo) => {
-        if (myTodo.id == todo.id) {
-          return todo;
-        }
-        return myTodo;
-      })
-    );
+  updateTodo(todo: Todo) {
+    let newTodoList = this.todoList.getValue();
+    let position = newTodoList.indexOf(todo);
+    newTodoList[position] = todo;
+    this.todoList.next(newTodoList);
   }
 
-  deleteTodo(id: number) {
-    this.todoList = this.todoList?.pipe(filter((todo: Todo) => todo.id !== id));
+  addTodo(todo: Todo): void {
+    this.todoList.next([...this.todoList.getValue(), todo]);
   }
 
-  @Output() change: EventEmitter<boolean> = new EventEmitter();
+  deleteTodo(todoId: number) {
+    let newTodoList = this.todoList.getValue();
+    newTodoList = newTodoList.filter((todo) => todo.id !== todoId);
+    this.todoList.next(newTodoList);
+  }
 }

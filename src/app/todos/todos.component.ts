@@ -19,33 +19,24 @@ export class TodosComponent implements OnInit {
   userName: any;
   formdata: any;
   todoList: Todo[] = [];
+  idVal = 0;
 
   onClickSubmit(data: any) {
     this.todosService.addTodo({
-      id: data.id ? data.id : this.todoList.length,
+      id: this.idVal,
       message: data.message,
       done: false,
     });
-    this.todoList = this.todosService.getTodos();
+    this.idVal++;
   }
 
   deleteTodo(id: number) {
     this.todosService.deleteTodo(id);
-    this.todoList = this.todosService.getTodos();
   }
   ngOnInit(): void {
-    const data$ = new Observable((observer) => {
-      observer.next(1);
-      observer.next(2);
-      observer.next(3);
-      observer.complete();
-    });
-
-    this.todoList = this.todosService.getTodos();
-
+    this.todosService.getTodos().subscribe((todos) => (this.todoList = todos));
     this.formdata = new FormGroup({
       message: new FormControl('message'),
-      id: new FormControl(),
     });
   }
 }
