@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Todo } from '../todo/todo.component';
 import { FormGroup, FormControl } from '@angular/forms';
 import { TodosService } from '../todos.service';
-import { DemoService } from '../demo.service';
+import { LocalStorageService } from '../localStorage.service';
 import { interval, Observable } from 'rxjs';
 
 @Component({
@@ -13,7 +13,7 @@ import { interval, Observable } from 'rxjs';
 export class TodosComponent implements OnInit {
   constructor(
     private todosService: TodosService,
-    private demoService: DemoService
+    private localStorageService: LocalStorageService
   ) {}
 
   userName: any;
