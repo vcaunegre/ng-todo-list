@@ -15,7 +15,6 @@ import { LocalStorageService } from './localStorage.service';
 @Injectable()
 export class TodosService {
   private todoList: BehaviorSubject<Todo[]> = new BehaviorSubject<Todo[]>([]);
-
   constructor(private localStorageService: LocalStorageService) {
     let result = this.localStorageService.getData('todos');
     this.todoList.next(result);

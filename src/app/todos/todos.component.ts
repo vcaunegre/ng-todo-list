@@ -19,15 +19,13 @@ export class TodosComponent implements OnInit {
   userName: any;
   formdata: any;
   todoList: Todo[] = [];
-  idVal = 0;
 
   onClickSubmit(data: any) {
     this.todosService.addTodo({
-      id: this.idVal,
+      id: Math.floor(Math.random() * 10000),
       message: data.message,
       done: false,
     });
-    this.idVal++;
   }
 
   deleteTodo(id: number) {
