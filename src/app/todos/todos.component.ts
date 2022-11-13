@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../todo/todo.component';
-import { FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { TodosService } from '../todos.service';
 import { LocalStorageService } from '../localStorage.service';
 import { interval, Observable } from 'rxjs';
@@ -33,8 +33,8 @@ export class TodosComponent implements OnInit {
   }
   ngOnInit(): void {
     this.todosService.getTodos().subscribe((todos) => (this.todoList = todos));
-    this.formdata = new FormGroup({
-      message: new FormControl('message'),
+    this.formdata = new UntypedFormGroup({
+      message: new UntypedFormControl('message'),
     });
   }
 }

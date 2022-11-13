@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Todo } from '../todo/todo.component';
 import { TodosService } from '../todos.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-edit',
@@ -19,8 +19,8 @@ export class EditComponent implements OnInit {
     private todosService: TodosService
   ) {}
   ngOnInit(): void {
-    this.formdata = new FormGroup({
-      message: new FormControl(),
+    this.formdata = new UntypedFormGroup({
+      message: new UntypedFormControl(),
     });
 
     let result = this.route.snapshot.paramMap.get('id');

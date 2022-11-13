@@ -1,6 +1,17 @@
-<div class="todo" *ngIf="todo">
-    <p>{{todo.id}}</p>
-    <p>{{todo.message}}</p>
-    <button (click)="deleteMyTodo(todo.id)" class="btn-delete">Delete</button>
-    <li><a [routerLink]="['/edit',todo.id]">edit</a></li>
+<div class="list-group-item container text-center" *ngIf="todo">
+    <div class="row">
+        <p class="col">
+            {{todo.id}}
+        </p>
+        <p class="col">{{todo.message}}</p>
+        <div class="col">
+
+            <button (click)="deleteMyTodo(todo.id)" class="btn btn-danger">Delete</button>
+        </div>
+        <div class="col">
+            <a class=" btn btn-warning" title="edit" [routerLink]="['/edit',todo.id]">
+                Edit
+            </a>
+        </div>
+    </div>
 </div>
