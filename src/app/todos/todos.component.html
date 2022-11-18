@@ -5,7 +5,7 @@
         <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
             <div class="form-group">
                 <label for="message">Message</label>
-                <input type="text" class="form-control" name="message" placeholder="message">
+                <input type="text" class="form-control" name="message" placeholder="message" formControlName="message">
                 <br />
                 <br />
             </div>
