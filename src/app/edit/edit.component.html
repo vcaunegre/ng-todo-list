@@ -1,6 +1,5 @@
 <form class="edit" [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
-    <input type="text" ngClass="message" formControlName="message" *ngIf="todo" [value]="todo.message"
-        [placeholder]="todo.message" />
+    <input type="text" ngClass="message" name="message" formControlName="message" *ngIf="todo" [value]="todo.message" />
     <br />
     <br />
     <input type="submit" value="Edit">

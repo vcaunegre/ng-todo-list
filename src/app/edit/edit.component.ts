@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Todo } from '../todo/todo.component';
 import { TodosService } from '../todos.service';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
@@ -16,13 +16,10 @@ export class EditComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private todosService: TodosService
+    private todosService: TodosService,
+    private router: Router
   ) {}
   ngOnInit(): void {
-    this.formdata = new UntypedFormGroup({
-      message: new UntypedFormControl(),
-    });
-
     let result = this.route.snapshot.paramMap.get('id');
     if (result !== null) {
       this.id = +result;
@@ -30,6 +27,9 @@ export class EditComponent implements OnInit {
     if (this.id !== null) {
       this.todo = this.todosService.getTodoById(this.id);
     }
+    this.formdata = new UntypedFormGroup({
+      message: new UntypedFormControl(this.todo?.message),
+    });
   }
 
   onClickSubmit(data: any) {
@@ -38,6 +38,7 @@ export class EditComponent implements OnInit {
       console.log(this.todo);
 
       this.todosService.updateTodo(this.todo);
+      this.router.navigate(['home']);
     }
   }
 }
