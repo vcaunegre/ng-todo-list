@@ -12,6 +12,7 @@ export const appRouteList: Routes = [
     path: 'edit/:id',
     component: EditComponent,
   },
+
   {
     path: '**',
     redirectTo: '',
