@@ -1,8 +1,18 @@
-<form class="edit" [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
-    <input type="text" ngClass="message" formControlName="message" *ngIf="todo" [value]="todo.message"
-        [placeholder]="todo.message" />
-    <br />
-    <br />
-    <input type="submit" value="Edit">
+<form
+  class="edit"
+  [formGroup]="formdata"
+  (ngSubmit)="onClickSubmit(formdata.value)"
+>
+  <input
+    type="text"
+    ngClass="description"
+    formControlName="description"
+    *ngIf="todo"
+    [value]="todo.description"
+    [placeholder]="todo.description"
+  />
+  <br />
+  <br />
+  <input type="submit" value="Edit" />
 </form>
 <router-outlet></router-outlet>

@@ -12,7 +12,7 @@ import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 export class EditComponent implements OnInit {
   id!: number | null;
   todo!: Todo | null;
-  formdata: any;
+  formdata!: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
@@ -20,7 +20,8 @@ export class EditComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.formdata = new UntypedFormGroup({
-      message: new UntypedFormControl(),
+      title: new UntypedFormControl(''),
+      description: new UntypedFormControl(''),
     });
 
     let result = this.route.snapshot.paramMap.get('id');
@@ -34,7 +35,7 @@ export class EditComponent implements OnInit {
 
   onClickSubmit(data: any) {
     if (this.todo) {
-      this.todo.message = data.message;
+      this.todo.description = data.description;
       console.log(this.todo);
 
       this.todosService.updateTodo(this.todo);

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Todo } from '../todo/todo.component';
 import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { TodosService } from '../todos.service';
 import { LocalStorageService } from '../localStorage.service';
 import { interval, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-todos',
@@ -11,22 +12,21 @@ import { interval, Observable } from 'rxjs';
   styleUrls: ['./todos.component.css'],
 })
 export class TodosComponent implements OnInit {
-  constructor(
-    private todosService: TodosService,
-    private localStorageService: LocalStorageService
-  ) {}
+  constructor(private todosService: TodosService, private http: HttpClient) {}
 
   userName: any;
-  formdata: any;
+  formdata!: UntypedFormGroup;
+  error!: string;
   todoList: Todo[] = [];
 
-  onClickSubmit(data: any) {
+  addTodo(data: any) {
     this.todosService.addTodo({
-      id: Math.floor(Math.random() * 10000),
       title: data.title,
-      message: 'ok',
+      description: data.description,
       done: false,
     });
+    this.formdata.setValue({ title: '', description: '' });
+    console.log(this.formdata.value);
   }
 
   deleteTodo(id: number) {
@@ -35,7 +35,18 @@ export class TodosComponent implements OnInit {
   ngOnInit(): void {
     this.todosService.getTodos().subscribe((todos) => (this.todoList = todos));
     this.formdata = new UntypedFormGroup({
-      message: new UntypedFormControl('message'),
+      title: new UntypedFormControl(''),
+      description: new UntypedFormControl(''),
     });
+
+    this.todosService.getRequestError()?.subscribe((result) => {
+      this.error = result;
+    });
+  }
+
+  fetchAwsApp() {
+    this.http
+      .get('https://todos-crud-dev.eu-west-3.elasticbeanstalk.com/todos')
+      .subscribe((res) => console.log(res));
   }
 }

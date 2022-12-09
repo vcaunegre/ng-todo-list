@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { TodosService } from '../todos.service';
 
 export interface Todo {
-  id: number;
+  id?: number;
   title: string;
-  message: string;
+  description: string;
   done: boolean;
 }
 
@@ -20,7 +21,11 @@ export class TodoComponent implements OnInit {
     this.deleteTodo.emit(id);
   }
 
-  constructor() {}
+  constructor(private todosService: TodosService) {}
 
   ngOnInit(): void {}
+
+  changeDone(todo: Todo) {
+    todo.id && this.todosService.changeTodoDone(todo.id, todo);
+  }
 }

@@ -1,6 +1,7 @@
 import { Injectable, Output, EventEmitter, OnInit } from '@angular/core';
 import {
   BehaviorSubject,
+  catchError,
   filter,
   findIndex,
   from,
@@ -8,14 +9,18 @@ import {
   Observable,
   of,
   Subject,
+  tap,
+  throwError,
 } from 'rxjs';
 import { Todo } from './todo/todo.component';
 import { LocalStorageService } from './localStorage.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ErrorException } from './model/Error';
 
 @Injectable()
 export class TodosService {
   private todoList: BehaviorSubject<Todo[]> = new BehaviorSubject<Todo[]>([]);
+  private requestError = new Subject<string>();
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -28,12 +33,13 @@ export class TodosService {
   }
 
   getAllTodos(): Observable<Todo[]> {
-    return this.http.get<any>('http://localhost:8080/todos').pipe(
+    return this.http.get<Todo[]>('http://localhost:8080/todos').pipe(
       map((responseData: Todo[]) => {
         let todosArray: Todo[] = [];
         for (const todo of responseData) {
           todosArray = [...todosArray, todo];
         }
+        responseData.sort((todo1, todo2) => todo1.id! - todo2.id!);
         return responseData;
       })
     );
@@ -41,6 +47,10 @@ export class TodosService {
 
   getTodos(): Observable<Todo[]> {
     return this.todoList;
+  }
+
+  getRequestError(): Observable<string> {
+    return this.requestError;
   }
 
   getTodoById(id: number) {
@@ -53,17 +63,19 @@ export class TodosService {
 
   addTodo(todo: Todo): void {
     this.http
-      .post('http://localhost:8080/todos', todo)
-      .subscribe((res) =>
-        this.todoList.next([...this.todoList.getValue(), todo])
-      );
+      .post<Todo>('http://localhost:8080/todos', todo)
+      .pipe(catchError((error) => throwError(() => error)))
+      .subscribe((res) => {
+        this.todoList.next([...this.todoList.getValue(), res]);
+      });
   }
 
   deleteTodo(todoId: number) {
     this.http
       .delete<Todo[]>('http://localhost:8080/todos/' + todoId)
-      .subscribe((res) => {
-        return this.todoList.next(res);
+      .subscribe({
+        next: (result) => this.todoList.next(result),
+        error: (err: ErrorException) => this.requestError.next(err.message),
       });
   }
   updateTodo(todo: Todo) {
@@ -76,5 +88,17 @@ export class TodosService {
       });
 
     this.localStorageService.saveData('todos', this.todoList.getValue());
+  }
+
+  changeTodoDone(id: number, todo: Todo) {
+    this.http
+      .put<Todo[]>('http://localhost:8080/todos/done/' + id, todo)
+      .subscribe((result) => {
+        let newTodoList: Todo[] = this.todoList.getValue().map((todo) => {
+          if (todo.id === id) todo.done = !todo.done;
+          return todo;
+        });
+        this.todoList.next(newTodoList);
+      });
   }
 }

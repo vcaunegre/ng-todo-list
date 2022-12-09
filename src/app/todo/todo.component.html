@@ -4,6 +4,15 @@
       {{ todo.id }}
     </p>
     <p class="col">{{ todo.title }}</p>
+    <p class="col">{{ todo.description }}</p>
+    <input
+      class="form-check-input"
+      type="checkbox"
+      value=""
+      id="flexCheckDisabled"
+      [checked]="todo.done"
+      (click)="changeDone(todo)"
+    />
     <div class="col">
       <button (click)="deleteMyTodo(todo.id)" class="btn btn-danger">
         Delete
