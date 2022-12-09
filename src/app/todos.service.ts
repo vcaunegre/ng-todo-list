@@ -11,13 +11,32 @@ import {
 } from 'rxjs';
 import { Todo } from './todo/todo.component';
 import { LocalStorageService } from './localStorage.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class TodosService {
   private todoList: BehaviorSubject<Todo[]> = new BehaviorSubject<Todo[]>([]);
-  constructor(private localStorageService: LocalStorageService) {
-    let result = this.localStorageService.getData('todos');
-    this.todoList.next(result);
+
+  constructor(
+    private localStorageService: LocalStorageService,
+    private http: HttpClient
+  ) {
+    // let result = this.localStorageService.getData('todos');
+    this.getAllTodos().subscribe((result) => {
+      this.todoList.next(result);
+    });
+  }
+
+  getAllTodos(): Observable<Todo[]> {
+    return this.http.get<any>('http://localhost:8080/todos').pipe(
+      map((responseData: Todo[]) => {
+        let todosArray: Todo[] = [];
+        for (const todo of responseData) {
+          todosArray = [...todosArray, todo];
+        }
+        return responseData;
+      })
+    );
   }
 
   getTodos(): Observable<Todo[]> {
@@ -32,23 +51,30 @@ export class TodosService {
     return null;
   }
 
-  updateTodo(todo: Todo) {
-    let newTodoList = this.todoList.getValue();
-    let position = newTodoList.indexOf(todo);
-    newTodoList[position] = todo;
-    this.todoList.next(newTodoList);
-    this.localStorageService.saveData('todos', this.todoList.getValue());
-  }
-
   addTodo(todo: Todo): void {
-    this.todoList.next([...this.todoList.getValue(), todo]);
-    this.localStorageService.saveData('todos', this.todoList.getValue());
+    this.http
+      .post('http://localhost:8080/todos', todo)
+      .subscribe((res) =>
+        this.todoList.next([...this.todoList.getValue(), todo])
+      );
   }
 
   deleteTodo(todoId: number) {
-    let newTodoList = this.todoList.getValue();
-    newTodoList = newTodoList.filter((todo) => todo.id !== todoId);
-    this.todoList.next(newTodoList);
+    this.http
+      .delete<Todo[]>('http://localhost:8080/todos/' + todoId)
+      .subscribe((res) => {
+        return this.todoList.next(res);
+      });
+  }
+  updateTodo(todo: Todo) {
+    this.http
+      .put('http://localhost:8080/todos/' + todo.id, todo, {
+        params: { 'Content-Type': 'application/json' },
+      })
+      .subscribe((result) => {
+        this.todoList.next([]);
+      });
+
     this.localStorageService.saveData('todos', this.todoList.getValue());
   }
 }

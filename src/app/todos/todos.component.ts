@@ -23,7 +23,8 @@ export class TodosComponent implements OnInit {
   onClickSubmit(data: any) {
     this.todosService.addTodo({
       id: Math.floor(Math.random() * 10000),
-      message: data.message,
+      title: data.title,
+      message: 'ok',
       done: false,
     });
   }

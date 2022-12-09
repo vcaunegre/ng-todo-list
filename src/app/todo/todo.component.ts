@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 export interface Todo {
   id: number;
+  title: string;
   message: string;
   done: boolean;
 }

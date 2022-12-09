@@ -8,9 +8,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
 import { AppRoutingModule } from './app-routing.module';
 import { TodosService } from './todos.service';
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [AppComponent, TodosComponent, TodoComponent, EditComponent],
-  imports: [BrowserModule, ReactiveFormsModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+    HttpClientModule,
+  ],
   providers: [TodosService],
   bootstrap: [AppComponent],
 })
