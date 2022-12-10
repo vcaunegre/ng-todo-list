@@ -1,21 +1,24 @@
 <div class="container">
-
-    <div class="container border border-primary m-2 p-2 rounded">
-
-        <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
-            <div class="form-group">
-                <label for="message">Message</label>
-                <input type="text" class="form-control" name="message" placeholder="message" formControlName="message">
-                <br />
-                <br />
-            </div>
-            <input class="btn btn-primary" type="submit" value="New todo">
-        </form>
-    </div>
-    <p>Textbox result is: {{userName}}</p>
-    <div class="list-group" *ngFor="let todo of todoList">
-        <app-todo (deleteTodo)="deleteTodo($event)" [todo]="todo"></app-todo>
-    </div>
+  <div class="container border border-primary m-2 p-2 rounded">
+    <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
+      <div class="form-group">
+        <label for="message">Message</label>
+        <input
+          type="text"
+          class="form-control"
+          name="message"
+          placeholder="message"
+          formControlName="message"
+        />
+        <br />
+        <br />
+      </div>
+      <input class="btn btn-primary" type="submit" value="New todo" />
+    </form>
+  </div>
+  <div class="list-group" *ngFor="let todo of todoList">
+    <app-todo (deleteTodo)="deleteTodo($event)" [todo]="todo"></app-todo>
+  </div>
 </div>
 
 <router-outlet></router-outlet>
