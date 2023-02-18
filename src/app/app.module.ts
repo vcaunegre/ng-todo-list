@@ -8,10 +8,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
 import { AppRoutingModule } from './app-routing.module';
 import { TodosService } from './todos.service';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 @NgModule({
   declarations: [AppComponent, TodosComponent, TodoComponent, EditComponent],
   imports: [BrowserModule, ReactiveFormsModule, AppRoutingModule],
-  providers: [TodosService],
+  providers: [
+    TodosService,
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
